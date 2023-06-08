@@ -1,0 +1,51 @@
+<div class="content list">
+    <div class="container-fluid">
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có muốn xoá: {{namDelete}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+          <button type="button" class="btn btn-danger"  data-bs-dismiss="modal" (click)="deleteBook()">Xoá</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        <div class="row">
+            <div class="col-4 p-3" *ngFor="let book of books; index as i">
+                <div class="card w-100" >
+                    <img src="{{book.image}}={{i}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4>{{book.title}}</h4>
+                      <p class="card-text">{{book.description}}</p>
+                    </div>
+    
+                    <div class="book-info d-flex">
+                        <p>Giá: {{book.price |  currency}}</p>
+                        <p>Số Lượng: {{book.quantity}}</p>
+                        <p title="Nhà xuất bản">NXB: {{book.type?.name}}</p>
+                    </div>
+                    <div class="d-flex justify-content-center mb-3">
+                        <button (click)="onDelete(book.title, book.id)" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Xoá
+                          </button>
+                        <a [routerLink]="['/edit', book.id]" class="btn btn-outline-warning mx-2">Sửa</a>
+                        <button class="btn btn-outline-info">Xem</button>
+
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+

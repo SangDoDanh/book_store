@@ -1,0 +1,17 @@
+<div class="container-fluid app">
+  <header class="row">
+    <app-header></app-header>  
+  </header>
+  <div class="row app-content">
+    <div class="col-2">
+      <app-side-bar></app-side-bar>
+    </div>
+
+    <div class="col-10">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <footer class="row">
+    <app-footer></app-footer>
+  </footer>
+</div>
