@@ -8,7 +8,7 @@ import { BookService } from 'src/app/service/book.service';
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css']
+  styleUrls: ['./edit.component.css'],
 })
 export class EditComponent {
   types: Type[] = [];
@@ -17,65 +17,63 @@ export class EditComponent {
 
   idEdit!: any;
 
-  constructor(private bookService: BookService, private fb: FormBuilder, private route: ActivatedRoute, private router: Router) {
+  constructor(
+    private bookService: BookService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.rfEdit = this.fb.group({
-        id:[''],
-        title: [''],
-        quantity: [''],
-        price: [''],
-        description: [''],
-        image: [''],
-        type: ['1'] 
-      });
-      
-
+      id: [''],
+      title: [''],
+      quantity: [''],
+      price: [''],
+      description: [''],
+      image: [''],
+      type: [''],
+    });
   }
 
-
-
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.idEdit = params['id'];
       console.log(this.idEdit);
-      this.bookService.getBookById(this.idEdit).subscribe(data => {
+      this.bookService.getBookById(this.idEdit).subscribe((data) => {
         this.bookEdit = data;
         this.bookEdit.id = this.idEdit;
         this.rfEdit.setValue(this.bookEdit);
-      })
+        this.rfEdit.patchValue({
+          type: this.bookEdit.type?.id,
+        });
+      });
     });
 
-
-    this.bookService.getAllTypes().subscribe(data => {
+    this.bookService.getAllTypes().subscribe((data) => {
       this.types = data;
     });
   }
 
   onSubmit() {
-
-    let typeAdd:Type = {};
+    let typeAdd: Type = {};
     let book: Book;
 
-
-    this.types.forEach(t => {
-      console.log()
-      if(t.id == this.rfEdit.value['type']) {
-
+    this.types.forEach((t) => {
+      console.log();
+      if (t.id == this.rfEdit.value['type']) {
         typeAdd = t;
       }
-    })
+    });
 
     book = this.rfEdit.value;
     book.type = typeAdd;
     book.image = 'https://picsum.photos/500/500?random';
-    this.bookService.addBook(book).subscribe(data => {
+    this.bookService.addBook(book).subscribe((data) => {
       console.log(data);
       this.router.navigateByUrl('/list');
-    })
+    });
   }
 
   compareFn(c1: any, c2: any): boolean {
-    console.log(c1 && c2 ? c1.id === c2.id : c1 === c2);
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
-
 }

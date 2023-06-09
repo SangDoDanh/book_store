@@ -1,51 +1,151 @@
 <div class="content list">
-    <div class="container-fluid">
+  <div class="container-fluid">
+    <!-- Modal Xóa-->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Xác nhận xóa sách
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>Bạn có muốn xoá: {{ namDelete }}</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Huỷ
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+              (click)="deleteBook()"
+            >
+              Xoá
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Modal Xem -->
+
+    <div
+      class="modal fade"
+      id="viewModal"
+      tabindex="-1"
+      aria-labelledby="viewModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="viewModalLabel">Xem sách</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div
+            class="modal-body d-flex justify-content-between"
+            *ngIf="bookView"
+          >
+            <div>
+              <p>Tên sách: {{ bookView.title }}</p>
+              <p>Giá: {{ bookView.price }}</p>
+              <p>Số lượng: {{ bookView.quantity }}</p>
+              <p>Nhà xuất bản: {{ bookView.type?.name }}</p>
+              <p>Mô tả: {{ bookView.description }}</p>
+            </div>
+            <div class="w-50">
+              <img
+                class="d-block w-100"
+                [src]="bookView.image + '' + bookView.id"
+                alt=""
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-bs-dismiss="modal">
+              OK
+            </button>
+          </div>
         </div>
-        <div class="modal-body">
-          <p>Bạn có muốn xoá: {{namDelete}}</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-          <button type="button" class="btn btn-danger"  data-bs-dismiss="modal" (click)="deleteBook()">Xoá</button>
+      </div>
+    </div>
+
+    <div class="row cus-list">
+      <Select class="w-25" (change)="changeCustomer($event)">
+        <option
+          [value]="c.customerId"
+          *ngFor="let c of customers; index as i"
+          class="p-2 me-2"
+        >
+          {{ c.customerName }}
+        </option>
+      </Select>
+    </div>
+    <div class="row">
+      <div class="col-4 p-3 book-item" *ngFor="let book of books; index as i">
+        <div class="card w-100">
+          <img src="{{ book.image }}={{ i }}" class="card-img-top" alt="..." />
+          <div class="card-body">
+            <h4>{{ book.title }}</h4>
+          </div>
+
+          <div class="p-2 book-info d-flex">
+            <p>Giá: {{ book.price | currency }}</p>
+            <p>Số Lượng: {{ book.quantity }}</p>
+          </div>
+          <div class="d-flex justify-content-center mb-3">
+            <button
+              (click)="onDelete(book.title, book.id)"
+              type="button"
+              class="btn btn-outline-danger"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              Xoá
+            </button>
+            <a
+              [routerLink]="['/edit', book.id]"
+              class="btn btn-outline-warning mx-2"
+              >Sửa</a
+            >
+            <button
+              (click)="viewBook(book)"
+              type="button"
+              class="btn btn-outline-info mx-2"
+              data-bs-toggle="modal"
+              data-bs-target="#viewModal"
+            >
+              Xem
+            </button>
+            <button (click)="onBtnPay(book)" class="btn btn-outline-success">
+              Mua
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-        <div class="row">
-            <div class="col-4 p-3" *ngFor="let book of books; index as i">
-                <div class="card w-100" >
-                    <img src="{{book.image}}={{i}}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h4>{{book.title}}</h4>
-                      <p class="card-text">{{book.description}}</p>
-                    </div>
-    
-                    <div class="book-info d-flex">
-                        <p>Giá: {{book.price |  currency}}</p>
-                        <p>Số Lượng: {{book.quantity}}</p>
-                        <p title="Nhà xuất bản">NXB: {{book.type?.name}}</p>
-                    </div>
-                    <div class="d-flex justify-content-center mb-3">
-                        <button (click)="onDelete(book.title, book.id)" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Xoá
-                          </button>
-                        <a [routerLink]="['/edit', book.id]" class="btn btn-outline-warning mx-2">Sửa</a>
-                        <button class="btn btn-outline-info">Xem</button>
-
-                    </div>
-                  </div>
-            </div>
-        </div>
-    </div>
-    
 </div>
-
-

@@ -1,60 +1,97 @@
 <div class="container-fluid cart">
+  <ul class="d-flex w-100 flex-wrap">
+    <li *ngFor="let c of customers; index as i" class="p-2 me-2">
+      <button
+        [ngClass]="i == 0 ? 'active' : ''"
+        (click)="changeOrderByCustomerId(c.customerId, $event)"
+        class="btn-change btn btn-outline-info btn-sm"
+      >
+        {{ c.customerName }}
+      </button>
+    </li>
+  </ul>
 
-    <ul class="d-flex w-100 flex-wrap">
-        <li *ngFor="let c of customers; index as i" class="p-2 me-2">
-            <button [ngClass]="i == 0 ? 'active' : ''" (click)="changeOrderByCustomerId(c.customerId, $event)" class="btn-change btn btn-outline-info btn-sm">{{c.customerName}}</button>
-        </li>
-    </ul>
-
-    <div class="d-flex justify-content-start w-100 flex-wrap mb-3 align-items-center">
-        <button (click)="pallAll()" [disabled]="ordersDetailList.length == 0" [ngClass]="ordersDetailList.length > 0 ? 'active' : ''" class="btn btn-outline-success btn-sm">Thanh toán tất cả </button>
-        <h4 class="m-0  ms-3 text-end">{{total |number}} $</h4>
-      </div>
-    <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>
-                <input type="checkbox">
-            </th>
-            <th scope="col">#</th>
-            <th scope="col">Tên Sách</th>
-            <th scope="col">Hình ảnh</th>
-            <th scope="col">Giá</th>
-            <th scope="col">Số Lượng</th>
-            <th scope="col">Ngày đặt</th>
-            <th scope="col">Tổng tiền</th>
-          </tr>
-        </thead>
-        <tbody>    
-          <tr *ngFor="let i = index ; let o of orders | paginate: { itemsPerPage: 4, currentPage: p }">
-            <td>
-                <input type="checkbox" (click)="updateOrdersDetailList(o)">
-            </td>
-            <th scope="row">{{i}}</th>
-            <td>{{o.title}}</td>
-            <td>
-                <img src="https://picsum.photos/80/80?random={{o.bookId}}" alt="">
-            </td>
-            <td>{{o.price}}</td>
-            <td style="vertical-align: middle;">
-                <div class="d-flex justify-content-evenly">
-                    <button (click)="dowQuantity(o)" style="width: 35px; height: 35px;">-</button>
-                    <input class="text-center" style="width: 50px;" type="text" [value]="o.quantity">
-                    <button (click)="upQuality(o)" style="width: 35px; height: 35px;">+</button>
-                </div>
-            </td>
-            <td>{{o.ordersDate}}</td>
-            <td>{{o.total}}</td>
-            <td style="vertical-align: middle;">
-                <div class="d-flex justify-content-evenly" *ngIf="o.orderDetailId">
-                    <button (click)="deleteOrderDetail(o.orderDetailId)" class="btn btn-sm btn-outline-danger">Xóa</button>
-                    <button (click)="deleteOrderDetail(o.orderDetailId)" class="btn btn-sm btn-outline-success">Thanh Toán</button>
-                </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <pagination-controls (pageChange)="p = $event"></pagination-controls>
-
-      
+  <div
+    class="d-flex justify-content-start w-100 flex-wrap mb-3 align-items-center"
+  >
+    <button
+      (click)="pallAll()"
+      [disabled]="ordersDetailList.length == 0"
+      [ngClass]="ordersDetailList.length > 0 ? 'active' : ''"
+      class="btn btn-outline-success btn-sm"
+    >
+      Thanh toán tất cả
+    </button>
+    <h4 class="m-0 ms-3 text-end">{{ total | number }} $</h4>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>
+          <input type="checkbox" />
+        </th>
+        <th scope="col">#</th>
+        <th scope="col">Tên Sách</th>
+        <th scope="col">Hình ảnh</th>
+        <th scope="col">Giá</th>
+        <th scope="col">Số Lượng</th>
+        <th scope="col">Ngày đặt</th>
+        <th scope="col">Tổng tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="
+          let i = index;
+          let o;
+          of: orders | paginate : { itemsPerPage: 4, currentPage: p }
+        "
+      >
+        <td>
+          <input type="checkbox" (click)="updateOrdersDetailList(o)" />
+        </td>
+        <th scope="row">{{ i }}</th>
+        <td>{{ o.title }}</td>
+        <td>
+          <img src="https://picsum.photos/80/80?random={{ o.bookId }}" alt="" />
+        </td>
+        <td>{{ o.price }}</td>
+        <td style="vertical-align: middle">
+          <div class="d-flex justify-content-evenly">
+            <button (click)="dowQuantity(o)" style="width: 35px; height: 35px">
+              -
+            </button>
+            <input
+              class="text-center"
+              style="width: 50px"
+              type="text"
+              [value]="o.quantity"
+            />
+            <button (click)="upQuality(o)" style="width: 35px; height: 35px">
+              +
+            </button>
+          </div>
+        </td>
+        <td>{{ o.ordersDate }}</td>
+        <td>{{ o.total }}</td>
+        <td style="vertical-align: middle">
+          <div class="d-flex justify-content-evenly" *ngIf="o.orderDetailId">
+            <button
+              (click)="deleteOrderDetail(o.orderDetailId)"
+              class="btn btn-sm btn-outline-danger"
+            >
+              Xóa
+            </button>
+            <button
+              (click)="deleteOrderDetail(o.orderDetailId)"
+              class="btn btn-sm btn-outline-success"
+            >
+              Thanh Toán
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
 </div>
