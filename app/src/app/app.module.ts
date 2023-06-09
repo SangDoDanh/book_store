@@ -11,6 +11,8 @@ import { ContentComponent } from './components/content/content.component';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
 import { AddComponent } from './components/add/add.component';
 import { EditComponent } from './components/edit/edit.component';
+import { CartComponent } from './components/cart/cart.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -20,14 +22,16 @@ import { EditComponent } from './components/edit/edit.component';
     ContentComponent,
     SideBarComponent,
     AddComponent,
-    EditComponent
+    EditComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxPaginationModule
     
   ],
   providers: [],
